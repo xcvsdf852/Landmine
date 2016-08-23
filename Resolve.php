@@ -5,6 +5,19 @@ if(!isset($_GET['map']) || empty($_GET['map'])){
     exit;
 }
 
+#檢查長度
+$len = strlen($_GET['map']);
+if($len != 109){
+    echo "不符合，總字數為$len";
+    exit;
+}
+
+#格式檢查
+if(!preg_match('/^[0-8MN]{109}$/',$_GET['map'])){
+    echo '不符合，格式有誤';
+    exit;
+}
+
 #檢查m小寫
 $m = substr_count($_GET['map'], "m");
 if($m > 0){
@@ -33,12 +46,6 @@ if($N != 9){
     exit;
 }
 
-#檢查長度
-$len = strlen($_GET['map']);
-if($len != 109){
-    echo "不符合，總字數為$len";
-    exit;
-}
 
 $strmap = $_GET['map'];
 #根據N切割成10個陣列
