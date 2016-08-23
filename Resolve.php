@@ -58,7 +58,6 @@ for($i=0; $i<=9; $i++){
     }
 }
 
-// var_dump($GET_map);
 $str_result = "";
 foreach ($GET_map as $key_1 => $val_1) {
     foreach($val_1 as $key_2 => $val_2){
@@ -68,13 +67,12 @@ foreach ($GET_map as $key_1 => $val_1) {
                 $str_result .=  '('.$key_1.','.$key_2.')';
                 // $str_result .=  '('.$key_1.','.$key_2.')應為='.$ANS.'<br>';
             }
-            // echo Score($GET_map,$key_1,$key_2);
         }
     }
 }
 
 if(!empty($str_result)){
-    echo '數字有誤座標 : '.$str_result;
+    echo '不符合，數字有誤座標 : '.$str_result;
     exit;
 }
 
