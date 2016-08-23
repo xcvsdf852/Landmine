@@ -1,51 +1,56 @@
 <?php
-
+$str_result = "";
 if(!isset($_GET['map']) || empty($_GET['map'])){
-    echo "不符合，因為無參數，或參數為空";
-    exit;
+    $str_result .= " 因為無參數，或參數為空";
 }
 
 $strmap = substr($_SERVER['QUERY_STRING'],4);
 
-#檢查長度
-$len = strlen($strmap);
-if($len != 109){
-    echo "不符合，總字數為$len";
-    exit;
-}
 
 #檢查m小寫
 $m = substr_count($strmap, "m");
 if($m > 0){
-    echo "不符合，請用大寫M";
-    exit;
+    $str_result .= " 地雷大小寫有錯，請用大寫M";
 }
 
 #檢查炸彈數量
 $M = substr_count($strmap, "M");
-if($M != 40){
-    echo "不符合，炸彈數量為$M";
-    exit;
+
+$Mm = $M + $m;
+if($Mm  != 40){
+    $str_result .= " 地雷數量有錯，只有$Mm 顆地雷";
 }
 
 #檢查n小寫
 $n = substr_count($strmap, "n");
 if($n > 0){
-    echo "不符合，請用大寫N";
-    exit;
+    $str_result .= " 請用大寫N";
 }
 
 #檢查N數量
 $N = substr_count($strmap, "N");
 if($N != 9){
-    echo "不符合，N數為$N";
-    exit;
+    $str_result .= " 斷行次數錯誤，N數為$N";
+    #判斷最後一個是否有N
+    if(substr($strmap, -1) == "N"){
+        echo '不符合，斷行次數錯誤，最後一個有N';
+        exit;
+    }
 }
 
+// if(!empty($str_result)){
+//     echo '不符合，原因 : '.$str_result;
+//     exit;
+// }
+#檢查長度
+// $len = strlen($strmap);
+// if($len != 109){
+//     $str_result .= " 總字數為$len";
+// }
+
 #格式檢查
-if(!preg_match('/^[0-8MN]{109}$/',$strmap)){
-    echo '不符合，格式有誤';
-    exit;
+if(!preg_match('/^[0-8MNmn]{1,}$/',$strmap)){
+    $str_result .= ' 出現格式意外的字元';
 }
 
 // $strmap = $_GET['map'];
@@ -61,15 +66,20 @@ foreach($arr_map as $k => $v){
 #根據陣列大小，判斷N位置是否有誤
 for($i=0; $i<=9; $i++){
     if(count($GET_map[$i]) != 10){
-        echo "不符合，N位置有誤";
-        exit;
+        $str_result .=  "不符合，N位置有誤";
     }
 }
 
-$str_result = "";
+#判斷第一維是否切割成10個
+if(count($arr_map) != 10){
+    echo '不符合，輸入地圖大小是'.count($GET_map['0']).'*'.count($arr_map).'應該為10 * 10';
+    exit;
+}
+
+
 foreach ($GET_map as $key_1 => $val_1) {
     foreach($val_1 as $key_2 => $val_2){
-        if($GET_map[$key_1][$key_2] != 'M'){
+        if($GET_map[$key_1][$key_2] != 'M' && $GET_map[$key_1][$key_2] != 'm'){
             $ANS = Score($GET_map,$key_1,$key_2);
             if($GET_map[$key_1][$key_2] != $ANS){
                 // $str_result .=  '('.$key_1.','.$key_2.')';
@@ -80,7 +90,7 @@ foreach ($GET_map as $key_1 => $val_1) {
 }
 
 if(!empty($str_result)){
-    echo '不符合，數字有誤座標 : '.$str_result;
+    echo '不符合，原因 : '.$str_result;
     exit;
 }
 
@@ -90,28 +100,28 @@ exit;
 function Score($origin,$x,$y){
     $temp = 0;
 
-    if($origin[$x-1][$y-1]==="M"){#左上
+    if($origin[$x-1][$y-1]==="M" || $origin[$x-1][$y-1]==="m"){#左上
         $temp += 1;
     }
-    if($origin[$x-1][$y]==="M"){#上
+    if($origin[$x-1][$y]==="M" || $origin[$x-1][$y]==="m"){#上
         $temp += 1;
     }
-    if($origin[$x-1][$y+1]==="M"){#右上
+    if($origin[$x-1][$y+1]==="M" || $origin[$x-1][$y+1]==="m"){#右上
         $temp += 1;
     }
-    if($origin[$x][$y+1]==="M"){#右
+    if($origin[$x][$y+1]==="M" || $origin[$x][$y+1]==="m"){#右
         $temp += 1;
     }
-    if($origin[$x][$y-1]==="M"){#左
+    if($origin[$x][$y-1]==="M" || $origin[$x][$y-1]==="m"){#左
          $temp += 1;
     }
-    if($origin[$x+1][$y+1]==="M"){#右下
+    if($origin[$x+1][$y+1]==="M" || $origin[$x+1][$y+1]==="m"){#右下
         $temp += 1;
     }
-    if($origin[$x+1][$y]==="M"){#下
+    if($origin[$x+1][$y]==="M" || $origin[$x+1][$y]==="m"){#下
         $temp += 1;
     }
-    if($origin[$x+1][$y-1]==="M"){#左下
+    if($origin[$x+1][$y-1]==="M" || $origin[$x+1][$y-1]==="m"){#左下
         $temp += 1;
     }
 
