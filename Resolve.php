@@ -5,48 +5,50 @@ if(!isset($_GET['map']) || empty($_GET['map'])){
     exit;
 }
 
+$strmap = substr($_SERVER['QUERY_STRING'],4);
+
 #檢查長度
-$len = strlen($_GET['map']);
+$len = strlen($strmap);
 if($len != 109){
     echo "不符合，總字數為$len";
     exit;
 }
 
 #檢查m小寫
-$m = substr_count($_GET['map'], "m");
+$m = substr_count($strmap, "m");
 if($m > 0){
     echo "不符合，請用大寫M";
     exit;
 }
 
 #檢查炸彈數量
-$M = substr_count($_GET['map'], "M");
+$M = substr_count($strmap, "M");
 if($M != 40){
     echo "不符合，炸彈數量為$M";
     exit;
 }
 
 #檢查n小寫
-$n = substr_count($_GET['map'], "n");
+$n = substr_count($strmap, "n");
 if($n > 0){
     echo "不符合，請用大寫N";
     exit;
 }
 
 #檢查N數量
-$N = substr_count($_GET['map'], "N");
+$N = substr_count($strmap, "N");
 if($N != 9){
     echo "不符合，N數為$N";
     exit;
 }
 
 #格式檢查
-if(!preg_match('/^[0-8MN]{109}$/',$_GET['map'])){
+if(!preg_match('/^[0-8MN]{109}$/',$strmap)){
     echo '不符合，格式有誤';
     exit;
 }
 
-$strmap = $_GET['map'];
+// $strmap = $_GET['map'];
 #根據N切割成10個陣列
 $arr_map = explode('N',$strmap);
 
