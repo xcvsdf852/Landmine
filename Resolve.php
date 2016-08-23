@@ -12,12 +12,6 @@ if($len != 109){
     exit;
 }
 
-#格式檢查
-if(!preg_match('/^[0-8MN]{109}$/',$_GET['map'])){
-    echo '不符合，格式有誤';
-    exit;
-}
-
 #檢查m小寫
 $m = substr_count($_GET['map'], "m");
 if($m > 0){
@@ -46,6 +40,11 @@ if($N != 9){
     exit;
 }
 
+#格式檢查
+if(!preg_match('/^[0-8MN]{109}$/',$_GET['map'])){
+    echo '不符合，格式有誤';
+    exit;
+}
 
 $strmap = $_GET['map'];
 #根據N切割成10個陣列
@@ -71,8 +70,8 @@ foreach ($GET_map as $key_1 => $val_1) {
         if($GET_map[$key_1][$key_2] != 'M'){
             $ANS = Score($GET_map,$key_1,$key_2);
             if($GET_map[$key_1][$key_2] != $ANS){
-                $str_result .=  '('.$key_1.','.$key_2.')';
-                // $str_result .=  '('.$key_1.','.$key_2.')應為='.$ANS.'<br>';
+                // $str_result .=  '('.$key_1.','.$key_2.')';
+                $str_result .=  '('.$key_1.','.$key_2.')數值為'.$GET_map[$key_1][$key_2].'，正確應為'.$ANS.'。';
             }
         }
     }
