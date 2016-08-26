@@ -4,14 +4,15 @@
 		<script type="text/javascript" src="jquery.js"></script>
 		<script>
 			var ans_map = new Array();
-			var numMines = 40;	//地雷的數量
-			var num = 60; //扣除地雷數
+			var numMines = 10;	//地雷的數量
+			var num = 90; //扣除地雷數
 			var t = 0; //時間
+			var myT;
 			$(document).ready(function(){
 				$.get('https://lab-eric3998.c9users.io/Landmine/LandmineStr.php',function(d){
 					map(d);
 				},'html')
-				setInterval(timedMsg,1000)
+				myT = setInterval(timedMsg,1000)
 				// map('MM10000000N2210111000N00001M2100N000012M100N0011111211N001M1001M1N0011100222N11111101M2N1M11M1012MN1111110011');
 			})
 
@@ -38,6 +39,7 @@
 				// console.log(ans_map);
 				if(numMines == 0 || num == 0 ){
 					alert('你贏了');
+					clearInterval(myT);
 					return;
 				}
 
@@ -46,6 +48,25 @@
 					if($("#"+y+x).text() == '*'){
 						return;
 					}
+
+					//判斷周圍地雷是否已經標記，落都標記則開啟周圍
+					// if(ans_map[y][x] == Score(y,x)){
+					// 	$("#"+y+x).text(ans_map[y][x]);
+					// 	ans_map[y][x] = -1;
+					// 	num--;
+					// 	console.log(num);
+					// 	// alert((y-1)+','+(x-1));
+					// 	check((y-1),(x-1));//左上
+					// 	check((y-1),x);//上
+					// 	check((y-1),(x+1));//右上
+					// 	check(y,(x+1))//右
+					// 	check(y,(x-1))//左
+					// 	check((y+1),(x+1))//右下
+					// 	check((y+1),x)//下
+					// 	check((y+1),(x-1))//左下
+					// 	return;
+					// }
+
 					if($("#"+y+x).text() != '.'){
 						return;
 					}
@@ -68,6 +89,7 @@
 					}
 					if(ans_map[y][x] == 'M'){
 						alert("你踩到地雷了!!");
+						clearInterval(myT);
 						for(y = 0; y < 10; y++){
 							for(x = 0; x < 10; x++){
 								if(ans_map[y][x] == 'M'){
@@ -81,13 +103,11 @@
 					num--;
 					console.log(num);
 
-					//判斷周圍地雷是否已經標記，落都標記則開啟周圍
-					// if(ans_map[y][x] == Score(y,x)){
 
-					// }
 
 					if(numMines == 0 || num == 0){
 						alert('你贏了');
+						clearInterval(myT);
 					}
 					return;
 				}
@@ -114,35 +134,35 @@
 
 			}
 
-			function Score(y,x){
-			    temp = 0;
-			    if($("#"+(y - 1)+(x - 1)).text() == "*"){//左上
-			        temp++;
-			    }
-			    if($("#"+(y - 1)+x).text()=="*"){//上
-			        temp++;
-			    }
-			    if($("#"+(y - 1)+(x + 1)).text()=="*"){//右上
-			        temp++;
-			    }
-			    if($("#"+x+(y + 1)).text() =="*"){//右
-			        temp++;
-			    }
-			    if($("#"+x+(y - 1)).text() =="*"){//左
-			         temp++;
-			    }
-			    if($("#"+(y + 1)+(x + 1)).text() =="*"){//右下
-			        temp++;
-			    }
-			    if($("#"+(y + 1)+x).text() =="*"){//下
-			        temp++;
-			    }
-			    if($("#"+(y + 1)+(x - 1)).text()=="*"){//左下
-			        temp++;
-			    }
+			// function Score(y,x){
+			//     temp = 0;
+			//     if($("#"+(y - 1)+(x - 1)).text() == "*"){//左上
+			//         temp++;
+			//     }
+			//     if($("#"+(y - 1)+x).text()=="*"){//上
+			//         temp++;
+			//     }
+			//     if($("#"+(y - 1)+(x + 1)).text()=="*"){//右上
+			//         temp++;
+			//     }
+			//     if($("#"+x+(y + 1)).text() =="*"){//右
+			//         temp++;
+			//     }
+			//     if($("#"+x+(y - 1)).text() =="*"){//左
+			//          temp++;
+			//     }
+			//     if($("#"+(y + 1)+(x + 1)).text() =="*"){//右下
+			//         temp++;
+			//     }
+			//     if($("#"+(y + 1)+x).text() =="*"){//下
+			//         temp++;
+			//     }
+			//     if($("#"+(y + 1)+(x - 1)).text()=="*"){//左下
+			//         temp++;
+			//     }
 
-			    return  temp;
-			}
+			//     return  temp;
+			// }
 
 			function timedMsg(){
 				t++;
